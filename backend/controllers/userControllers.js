@@ -81,5 +81,25 @@ const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 });
+//@description     Get all users
+//@route           GET /api/users
+//@access          Public
+const allUsersList = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.send(users);
+});
 
-module.exports = { allUsers, registerUser, authUser };
+const promoteUserToAdmin = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  user.isAdmin = true;
+  await user.save();
+
+  res.json({ message: 'User promoted to admin' });
+});
+module.exports = { allUsers, registerUser, authUser,allUsersList,promoteUserToAdmin };
