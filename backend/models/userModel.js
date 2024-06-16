@@ -18,7 +18,7 @@ const userSchema = mongoose.Schema(
       default: false,
     },
   },
-  { timestaps: true }
+  { timestamps: true } // Corrected typo here
 );
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
@@ -26,12 +26,13 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified) {
-    next();
+  if (!this.isModified("password")) { // Check specifically if the password is modified
+    return next(); // Call next() and exit the middleware
   }
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 const User = mongoose.model("User", userSchema);
