@@ -89,6 +89,22 @@ const allUsersList = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
+// const promoteUserToAdmin = asyncHandler(async (req, res) => {
+//   const user = await User.findById(req.params.id);
+
+//   if (!user) {
+//     res.status(404);
+//     throw new Error('User not found');
+//   }
+
+//   user.isAdmin = true;
+//   await user.save();
+
+//   res.json({ message: 'User promoted to admin' });
+// });
+
+
+
 const promoteUserToAdmin = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
@@ -98,6 +114,7 @@ const promoteUserToAdmin = asyncHandler(async (req, res) => {
   }
 
   user.isAdmin = true;
+
   await user.save();
 
   res.json({ message: 'User promoted to admin' });
